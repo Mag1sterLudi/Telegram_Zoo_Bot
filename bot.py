@@ -5,13 +5,30 @@
 import csv
 import logging
 import os
+import sys
 import urllib.request
 from datetime import datetime
 from threading import Lock
 from urllib.parse import quote
 
-import telebot
-from telebot import types
+try:
+    import telebot
+    from telebot import types
+except ModuleNotFoundError:
+    # Самая частая засада: пользователь запустил python из системного окружения
+    # (например, conda base), где нет наших зависимостей. Подсказываем способы.
+    print(
+        "\nНе установлен пакет pyTelegramBotAPI.\n\n"
+        "Самый простой способ запустить — через лаунчер,\n"
+        "он сам создаст виртуальное окружение и поставит зависимости:\n"
+        "    python run.py\n\n"
+        "Либо вручную:\n"
+        "    python -m venv .venv\n"
+        "    source .venv/bin/activate     # Windows: .venv\\Scripts\\activate\n"
+        "    pip install -r requirements.txt\n"
+        "    python bot.py\n"
+    )
+    sys.exit(1)
 
 from config import (
     BOT_TOKEN, BOT_USERNAME, ADMIN_CHAT_ID,
